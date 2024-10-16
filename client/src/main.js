@@ -42,21 +42,27 @@ $input.type = 'file';
 $input.accept = 'image/*';
 $input.className = 'w-full p-2 border border-gray-300 rounded-md';
 
+// Contenedor para la previsualización de la imagen
+const $imagePreviewContainer = document.createElement('div');
+$imagePreviewContainer.className = 'mt-4 flex justify-center';
+
 // Mostrar preview de la imagen (Opcional)
 $input.addEventListener('change', (event) => {
   const file = event.target.files[0];
   const reader = new FileReader();
 
   reader.onload = (readerEvent) => {
-    let $img = document.querySelector('img');
+    let $img = document.querySelector('#image-preview');
 
     if (!$img) {
       $img = document.createElement('img');
-      $img.className = 'w-64 h-auto mt-4';
+      $img.id = 'image-preview';
+      $img.className = 'w-64 h-auto rounded-lg shadow-md';
     }
 
     $img.src = readerEvent.target.result;
-    $container.appendChild($img);
+    $imagePreviewContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar la nueva imagen
+    $imagePreviewContainer.appendChild($img);
   };
 
   reader.readAsDataURL(file);
@@ -76,6 +82,7 @@ $form.appendChild($nameInput);
 $form.appendChild($descriptionInput);
 $form.appendChild($priceInput);
 $form.appendChild($input);
+$form.appendChild($imagePreviewContainer); // Añadir el contenedor de previsualización de la imagen
 $form.appendChild($button);
 
 // Añadir formulario y mensaje a la carta
@@ -119,6 +126,7 @@ $form.addEventListener('submit', async (event) => {
         .join(', ')}`;
       $message.className = 'mt-4 text-center text-red-500';
     }
+    console.log(response);
   } catch (error) {
     $message.textContent = 'Error interno del servidor';
     $message.className = 'mt-4 text-center text-red-500';
