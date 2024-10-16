@@ -91,7 +91,17 @@ $app.appendChild($container);
 $form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const formData = new FormData(event.target);
+  const formData = new FormData();
+
+  const price = parseFloat($priceInput.value);
+  $priceInput.value = price;
+
+  // Convertir el campo price a número antes de agregarlo a FormData
+  formData.append('name', $nameInput.value);
+  formData.append('description', $descriptionInput.value);
+  formData.append('price', $priceInput.value);
+  formData.append('productImage', $input.files[0]);
+  // console.log(typeof parseFloat($priceInput.value));
 
   try {
     const response = await fetch('http://localhost:8080/api/products/', {
@@ -103,12 +113,12 @@ $form.addEventListener('submit', async (event) => {
       $message.textContent = 'Producto creado exitosamente';
       $message.className = 'mt-4 text-center text-green-500';
     } else {
-      $message.textContent = 'Error al crear el producto';
+      const errorData = await response.json();
+      $message.textContent = `Error: ${errorData.errors
+        .map((err) => err.message)
+        .join(', ')}`;
       $message.className = 'mt-4 text-center text-red-500';
     }
-
-    const data = await response.json();
-    console.log(data);
   } catch (error) {
     $message.textContent = 'Error interno del servidor';
     $message.className = 'mt-4 text-center text-red-500';
