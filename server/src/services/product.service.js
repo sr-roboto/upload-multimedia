@@ -2,15 +2,14 @@ import { Product } from '../database/db.js';
 
 const createProductService = async (productData) => {
   try {
-    const { name, description, price, image } = productData;
-    console.log(image);
+    const { name, description, price, productImage } = productData;
 
     const newProduct = {
       id: Product.length + 1,
       name,
       description,
       price,
-      imageUrl: 'http://localhost:8080/' + image,
+      imageUrl: 'http://localhost:8080/' + productImage,
     };
 
     Product.push(newProduct);

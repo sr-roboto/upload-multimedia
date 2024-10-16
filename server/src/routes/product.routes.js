@@ -4,6 +4,6 @@ import { createProductController } from '../controllers/product.controller.js';
 
 const productRouter = Router();
 
-productRouter.post('/', uploadImage, createProductController);
+productRouter.post('/', uploadImage('productImage'), createProductController);
 
 export { productRouter };

@@ -1,8 +1,8 @@
 import multer from 'multer';
 import { upload } from '../configs/uploadConfig.js';
 
-const uploadImage = (req, res, next) => {
-  const uploadSingle = upload.single('image');
+const uploadImage = (fieldName) => (req, res, next) => {
+  const uploadSingle = upload.single(fieldName);
 
   uploadSingle(req, res, (err) => {
     if (err instanceof multer.MulterError) {
@@ -15,7 +15,7 @@ const uploadImage = (req, res, next) => {
       return res.status(400).json({ msg: 'No se ha subido archivo' });
     }
 
-    req.body['image'] = req.file.filename;
+    req.body[fieldName] = req.file.filename;
 
     next();
   });
